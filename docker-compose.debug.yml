@@ -1,0 +1,22 @@
+services:
+  pg:
+    image: "${IMAGE_REGISTRY_BASE_URL}/postgis/postgis:14-3.2"
+    restart: "always"
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    healthcheck:
+      test: "pg_isready --username=${DB_USERNAME} && psql --username=${DB_USERNAME} --list"
+      timeout: 10s
+      retries: 20
+    environment:
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+
+  db:
+    network_mode: "host"
+    depends_on:
+      pg:
+        condition: service_healthy
+    image: "${IMAGE_REGISTRY_BASE_URL}/alchemypdf-db:latest"
+    env_file:
+      - .env
