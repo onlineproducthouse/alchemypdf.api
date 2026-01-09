@@ -8,7 +8,7 @@ import (
 
 	"github.com/georgysavva/scany/pgxscan"
 	"github.com/jackc/pgx/v4/pgxpool"
-	alchemypdfapihttputils "github.com/onlineproducthouse/alchemypdf.api.httputils"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperror"
 )
 
 type (
@@ -28,12 +28,12 @@ type (
 	}
 
 	IRequestModel interface {
-		Insert(payload Schema) ([]*Schema, *alchemypdfapihttputils.AppError)
-		SelectByClientReference(clientReference string) ([]*Schema, *alchemypdfapihttputils.AppError)
-		SelectWithContentByClientReference(clientReference string) ([]*Schema, *alchemypdfapihttputils.AppError)
-		SelectByState(stateKey string) ([]*Schema, *alchemypdfapihttputils.AppError)
-		StateUpdate(payload Schema) ([]*Schema, *alchemypdfapihttputils.AppError)
-		AttemptCountIncrement(payload Schema) ([]*Schema, *alchemypdfapihttputils.AppError)
+		Insert(payload Schema) ([]*Schema, *httperror.AppError)
+		SelectByClientReference(clientReference string) ([]*Schema, *httperror.AppError)
+		SelectWithContentByClientReference(clientReference string) ([]*Schema, *httperror.AppError)
+		SelectByState(stateKey string) ([]*Schema, *httperror.AppError)
+		StateUpdate(payload Schema) ([]*Schema, *httperror.AppError)
+		AttemptCountIncrement(payload Schema) ([]*Schema, *httperror.AppError)
 	}
 
 	RequestModel struct {
@@ -45,7 +45,7 @@ func NewRequestModel(conn *pgxpool.Pool) RequestModel {
 	return RequestModel{conn}
 }
 
-func (m RequestModel) Insert(payload Schema) ([]*Schema, *alchemypdfapihttputils.AppError) {
+func (m RequestModel) Insert(payload Schema) ([]*Schema, *httperror.AppError) {
 	const op = "RequestModel.Insert"
 
 	const query string = `
@@ -89,13 +89,13 @@ func (m RequestModel) Insert(payload Schema) ([]*Schema, *alchemypdfapihttputils
 		payload.AttemptCount,
 		payload.CreatedAt,
 	); err != nil {
-		return nil, alchemypdfapihttputils.UnknownErr(err.Error(), op, err)
+		return nil, httperror.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) SelectByClientReference(clientReference string) ([]*Schema, *alchemypdfapihttputils.AppError) {
+func (m RequestModel) SelectByClientReference(clientReference string) ([]*Schema, *httperror.AppError) {
 	const op = "RequestModel.SelectByClientReference"
 
 	const query string = `
@@ -125,13 +125,13 @@ func (m RequestModel) SelectByClientReference(clientReference string) ([]*Schema
 		query,
 		clientReference,
 	); err != nil {
-		return nil, alchemypdfapihttputils.UnknownErr(err.Error(), op, err)
+		return nil, httperror.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) SelectWithContentByClientReference(clientReference string) ([]*Schema, *alchemypdfapihttputils.AppError) {
+func (m RequestModel) SelectWithContentByClientReference(clientReference string) ([]*Schema, *httperror.AppError) {
 	const op = "RequestModel.SelectWithContentByClientReference"
 
 	const query string = `
@@ -162,13 +162,13 @@ func (m RequestModel) SelectWithContentByClientReference(clientReference string)
 		query,
 		clientReference,
 	); err != nil {
-		return nil, alchemypdfapihttputils.UnknownErr(err.Error(), op, err)
+		return nil, httperror.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) SelectByState(stateKey string) ([]*Schema, *alchemypdfapihttputils.AppError) {
+func (m RequestModel) SelectByState(stateKey string) ([]*Schema, *httperror.AppError) {
 	const op = "RequestModel.SelectByState"
 
 	const query string = `
@@ -202,13 +202,13 @@ func (m RequestModel) SelectByState(stateKey string) ([]*Schema, *alchemypdfapih
 		query,
 		stateKey,
 	); err != nil {
-		return nil, alchemypdfapihttputils.UnknownErr(err.Error(), op, err)
+		return nil, httperror.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) StateUpdate(payload Schema) ([]*Schema, *alchemypdfapihttputils.AppError) {
+func (m RequestModel) StateUpdate(payload Schema) ([]*Schema, *httperror.AppError) {
 	const op = "RequestModel.StateUpdate"
 
 	const query string = `
@@ -233,13 +233,13 @@ func (m RequestModel) StateUpdate(payload Schema) ([]*Schema, *alchemypdfapihttp
 		payload.UpdatedAt.Time,
 		strings.TrimSpace(payload.RequestStateKey),
 	); err != nil {
-		return nil, alchemypdfapihttputils.UnknownErr(err.Error(), op, err)
+		return nil, httperror.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) AttemptCountIncrement(payload Schema) ([]*Schema, *alchemypdfapihttputils.AppError) {
+func (m RequestModel) AttemptCountIncrement(payload Schema) ([]*Schema, *httperror.AppError) {
 	const op = "RequestModel.AttemptCountIncrement"
 
 	const query string = `
@@ -263,7 +263,7 @@ func (m RequestModel) AttemptCountIncrement(payload Schema) ([]*Schema, *alchemy
 		payload.RequestID,
 		payload.UpdatedAt.Time,
 	); err != nil {
-		return nil, alchemypdfapihttputils.UnknownErr(err.Error(), op, err)
+		return nil, httperror.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil

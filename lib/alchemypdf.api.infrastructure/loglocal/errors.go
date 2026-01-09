@@ -4,11 +4,11 @@ import (
 	"strings"
 
 	constant "alchemypdf.api/lib/alchemypdf.api.constant"
-	alchemypdfapihttputils "github.com/onlineproducthouse/alchemypdf.api.httputils"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperror"
 	"github.com/rs/zerolog/log"
 )
 
-func (logger Logger) AppError(err alchemypdfapihttputils.IAppError) {
+func (logger Logger) AppError(err httperror.IAppError) {
 	if strings.ToLower(logger.config.EnvName()) == constant.ENV_LOCAL ||
 		strings.ToLower(logger.config.EnvName()) == constant.ENV_TEST {
 		log.Err(err)

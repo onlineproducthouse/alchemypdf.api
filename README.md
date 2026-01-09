@@ -8,7 +8,7 @@ To start the API, first you need to install dependencies by executing following 
  $ go mod download
  $ go get -u github.com/swaggo/swag/cmd/swag
  $ go install github.com/swaggo/swag/cmd/swag
- $ $(go env GOPATH)/bin/swag init -g services/alchemypdf.api.app/app/app.go
+ $ $(go env GOPATH)/bin/swag init --parseDependency -g services/alchemypdf.api.app/app/app.go
 ```
 
 Now you can either run the VSCode debugger to execute the project or execute the command:
