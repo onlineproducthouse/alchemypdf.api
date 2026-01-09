@@ -9,10 +9,8 @@ import (
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/config"
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/loglocal"
 	"alchemypdf.api/lib/alchemypdf.api.service/requestsvc"
-	"alchemypdf.api/lib/alchemypdf.api.util/errorlocal"
-	"alchemypdf.api/lib/alchemypdf.api.util/httpresponse"
-	"alchemypdf.api/lib/alchemypdf.api.util/httpstatuslocal"
 	"github.com/labstack/echo/v4"
+	alchemypdfapihttputils "github.com/onlineproducthouse/alchemypdf.api.httputils"
 )
 
 type (
@@ -75,8 +73,8 @@ func NewRequestCtrl(
 // @router /v1/Request/Create [post]
 // @accept json
 // @produce json
-// @success 200 {object} httpresponse.Response
-// @Failure 400,500 {object} httpresponse.Response
+// @success 200 {object} alchemypdfapihttputils.Response
+// @Failure 400,500 {object} alchemypdfapihttputils.Response
 // @param x-api-key header string true "API Key"
 // @param payload body CreateRequest true "CreateRequest"
 func (ctrl RequestCtrl) HandleCreate(c echo.Context) error {
@@ -87,11 +85,11 @@ func (ctrl RequestCtrl) HandleCreate(c echo.Context) error {
 	var req CreateRequest
 	if err := c.Bind(&req); err != nil {
 		ctrl.logger.Debug(`"RequestCtrl.HandleCreate": failed to parse body`)
-		ctrl.logger.AppError(errorlocal.UnknownErr(err.Error(), op, err))
+		ctrl.logger.AppError(alchemypdfapihttputils.UnknownErr(err.Error(), op, err))
 
-		statusCode, _ := httpstatuslocal.InternalServerError()
+		statusCode, _ := alchemypdfapihttputils.InternalServerError()
 		ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
-		return c.JSON(statusCode, httpresponse.Default(err.Error(), statusCode))
+		return c.JSON(statusCode, alchemypdfapihttputils.Default(err.Error(), statusCode))
 	}
 
 	if err := ctrl.requestService.Create(requestcontract.CreateRequest{
@@ -99,16 +97,16 @@ func (ctrl RequestCtrl) HandleCreate(c echo.Context) error {
 		Content:         req.Content,
 		CallbackURL:     req.CallbackURL,
 	}); err != nil {
-		ctrl.logger.AppError(errorlocal.CatchErr(err, op))
+		ctrl.logger.AppError(alchemypdfapihttputils.CatchErr(err, op))
 		ctrl.logger.HTTPResponse(err.StatusCode(), c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		return c.JSON(err.StatusCode(), alchemypdfapihttputils.Default(err.Error(), err.StatusCode()))
 	}
 
-	statusCode, statusCodeText := httpstatuslocal.Ok()
+	statusCode, statusCodeText := alchemypdfapihttputils.Ok()
 
 	ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
 
-	return c.JSON(statusCode, httpresponse.Default(statusCodeText, statusCode))
+	return c.JSON(statusCode, alchemypdfapihttputils.Default(statusCodeText, statusCode))
 }
 
 // Request/GetByClientReference godoc
@@ -119,7 +117,7 @@ func (ctrl RequestCtrl) HandleCreate(c echo.Context) error {
 // @accept json
 // @produce json
 // @success 200 {object} []Request
-// @Failure 400,500 {object} httpresponse.Response
+// @Failure 400,500 {object} alchemypdfapihttputils.Response
 // @param x-api-key header string true "API Key"
 // @param ClientReference path string true "ClientReference"
 func (ctrl RequestCtrl) HandleGetByClientReference(c echo.Context) error {
@@ -129,11 +127,11 @@ func (ctrl RequestCtrl) HandleGetByClientReference(c echo.Context) error {
 
 	res, err := ctrl.requestService.GetByClientReference(c.Param("ClientReference"))
 	if err != nil {
-		ctrl.logger.AppError(errorlocal.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		ctrl.logger.AppError(alchemypdfapihttputils.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), alchemypdfapihttputils.Default(err.Error(), err.StatusCode()))
 	}
 
-	statusCode, _ := httpstatuslocal.Ok()
+	statusCode, _ := alchemypdfapihttputils.Ok()
 
 	ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
 
@@ -148,7 +146,7 @@ func (ctrl RequestCtrl) HandleGetByClientReference(c echo.Context) error {
 // @accept json
 // @produce json
 // @success 200 {object} []Request
-// @Failure 400,500 {object} httpresponse.Response
+// @Failure 400,500 {object} alchemypdfapihttputils.Response
 // @param x-api-key header string true "API Key"
 // @param ClientReference path string true "ClientReference"
 func (ctrl RequestCtrl) HandleGetWithContentByClientReference(c echo.Context) error {
@@ -158,11 +156,11 @@ func (ctrl RequestCtrl) HandleGetWithContentByClientReference(c echo.Context) er
 
 	res, err := ctrl.requestService.GetWithContentByClientReference(c.Param("ClientReference"))
 	if err != nil {
-		ctrl.logger.AppError(errorlocal.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		ctrl.logger.AppError(alchemypdfapihttputils.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), alchemypdfapihttputils.Default(err.Error(), err.StatusCode()))
 	}
 
-	statusCode, _ := httpstatuslocal.Ok()
+	statusCode, _ := alchemypdfapihttputils.Ok()
 
 	ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
 
@@ -177,7 +175,7 @@ func (ctrl RequestCtrl) HandleGetWithContentByClientReference(c echo.Context) er
 // @accept json
 // @produce json
 // @success 200 {object} Request
-// @Failure 400,500 {object} httpresponse.Response
+// @Failure 400,500 {object} alchemypdfapihttputils.Response
 // @param x-api-key header string true "API Key"
 func (ctrl RequestCtrl) HandleGetPending(c echo.Context) error {
 	const op = "RequestCtrl.HandleGetPending"
@@ -186,19 +184,19 @@ func (ctrl RequestCtrl) HandleGetPending(c echo.Context) error {
 
 	res, err := ctrl.getPending()
 	if err != nil {
-		ctrl.logger.AppError(errorlocal.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		ctrl.logger.AppError(alchemypdfapihttputils.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), alchemypdfapihttputils.Default(err.Error(), err.StatusCode()))
 	}
 
 	if err := ctrl.requestService.StateUpdate(requestcontract.StateUpdateRequest{
 		RequestID:       res.RequestID,
 		RequestStateKey: constant.RequestStateInProgress,
 	}); err != nil {
-		ctrl.logger.AppError(errorlocal.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		ctrl.logger.AppError(alchemypdfapihttputils.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), alchemypdfapihttputils.Default(err.Error(), err.StatusCode()))
 	}
 
-	statusCode, _ := httpstatuslocal.Ok()
+	statusCode, _ := alchemypdfapihttputils.Ok()
 
 	ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
 
@@ -229,14 +227,14 @@ func mapToDomain(v *requestcontract.Request) *Request {
 	}
 }
 
-func (ctrl RequestCtrl) getPending() (*Request, *errorlocal.AppError) {
+func (ctrl RequestCtrl) getPending() (*Request, *alchemypdfapihttputils.AppError) {
 	const op = "RequestCtrl.getPending"
 
 	ctrl.logger.Info(fmt.Sprintf("[%s]: starting", op))
 
 	res, err := ctrl.requestService.GetByState(constant.RequestStatePending)
 	if err != nil {
-		return nil, errorlocal.CatchErr(err, op)
+		return nil, alchemypdfapihttputils.CatchErr(err, op)
 	}
 
 	if res.AttemptCount >= 3 {
@@ -244,7 +242,7 @@ func (ctrl RequestCtrl) getPending() (*Request, *errorlocal.AppError) {
 			RequestID:       res.RequestID,
 			RequestStateKey: constant.RequestStateAttemptLimitReached,
 		}); err != nil {
-			return nil, errorlocal.CatchErr(err, op)
+			return nil, alchemypdfapihttputils.CatchErr(err, op)
 		}
 
 		return ctrl.getPending()
@@ -260,8 +258,8 @@ func (ctrl RequestCtrl) getPending() (*Request, *errorlocal.AppError) {
 // @router /v1/Request/Complete [post]
 // @accept json
 // @produce json
-// @success 200 {object} httpresponse.Response
-// @Failure 400,500 {object} httpresponse.Response
+// @success 200 {object} alchemypdfapihttputils.Response
+// @Failure 400,500 {object} alchemypdfapihttputils.Response
 // @param x-api-key header string true "API Key"
 // @param payload body CompleteRequest true "CompleteRequest"
 func (ctrl RequestCtrl) HandleComplete(c echo.Context) error {
@@ -272,11 +270,11 @@ func (ctrl RequestCtrl) HandleComplete(c echo.Context) error {
 	var completeReq CompleteRequest
 	if err := c.Bind(&completeReq); err != nil {
 		ctrl.logger.Debug(fmt.Sprintf("[%s]: failed to parse body", op))
-		ctrl.logger.AppError(errorlocal.UnknownErr(err.Error(), op, err))
+		ctrl.logger.AppError(alchemypdfapihttputils.UnknownErr(err.Error(), op, err))
 
-		statusCode, _ := httpstatuslocal.InternalServerError()
+		statusCode, _ := alchemypdfapihttputils.InternalServerError()
 		ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
-		return c.JSON(statusCode, httpresponse.Default(err.Error(), statusCode))
+		return c.JSON(statusCode, alchemypdfapihttputils.Default(err.Error(), statusCode))
 	}
 
 	requestStateKey := constant.RequestStatePending
@@ -288,10 +286,10 @@ func (ctrl RequestCtrl) HandleComplete(c echo.Context) error {
 		RequestID:       completeReq.RequestID,
 		RequestStateKey: requestStateKey,
 	}); err != nil {
-		ctrl.logger.AppError(errorlocal.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		ctrl.logger.AppError(alchemypdfapihttputils.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), alchemypdfapihttputils.Default(err.Error(), err.StatusCode()))
 	}
 
-	statusCode, statusCodeText := httpstatuslocal.Ok()
-	return c.JSON(statusCode, httpresponse.Default(statusCodeText, statusCode))
+	statusCode, statusCodeText := alchemypdfapihttputils.Ok()
+	return c.JSON(statusCode, alchemypdfapihttputils.Default(statusCodeText, statusCode))
 }

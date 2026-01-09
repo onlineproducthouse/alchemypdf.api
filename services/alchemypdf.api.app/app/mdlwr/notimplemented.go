@@ -3,9 +3,8 @@ package mdlwr
 import (
 	"strings"
 
-	"alchemypdf.api/lib/alchemypdf.api.util/errorlocal"
-	"alchemypdf.api/lib/alchemypdf.api.util/httpresponse"
 	"github.com/labstack/echo/v4"
+	alchemypdfapihttputils "github.com/onlineproducthouse/alchemypdf.api.httputils"
 )
 
 func (api MiddlewareAPI) NotImplemented(envList []string) func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -23,9 +22,9 @@ func (api MiddlewareAPI) NotImplemented(envList []string) func(next echo.Handler
 			}
 
 			if isNotImplemented {
-				err := errorlocal.NotImplementedErr("MiddlewareAPI.NotImplemented")
+				err := alchemypdfapihttputils.NotImplementedErr("MiddlewareAPI.NotImplemented")
 				api.logger.AppError(err)
-				return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+				return c.JSON(err.StatusCode(), alchemypdfapihttputils.Default(err.Error(), err.StatusCode()))
 			}
 
 			return next(c)
