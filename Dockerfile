@@ -35,7 +35,7 @@ COPY ./lib/alchemypdf.api.util ./lib/alchemypdf.api.util
 
 COPY ./services/alchemypdf.api.app ./services/alchemypdf.api.app
 
-RUN $(go env GOPATH)/bin/swag init -g services/alchemypdf.api.app/app/app.go
+RUN $(go env GOPATH)/bin/swag init --parseDependency -g services/alchemypdf.api.app/app/app.go
 
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o ${ALCHEMYPDF_BIN_FOLDER}/app ./services/alchemypdf.api.app/main.go
 
