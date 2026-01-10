@@ -20,6 +20,7 @@ type RequestService struct {
 
 type IRequestService interface {
 	Create(payload requestcontract.CreateRequest) *httperror.AppError
+	GetByID(requestID int) (*requestcontract.Request, *httperror.AppError)
 	GetByClientReference(clientReference string) ([]*requestcontract.Request, *httperror.AppError)
 	GetWithContentByClientReference(clientReference string) ([]*requestcontract.Request, *httperror.AppError)
 	GetByState(stateKey string) (*requestcontract.Request, *httperror.AppError)
@@ -74,6 +75,29 @@ func (h RequestService) Create(payload requestcontract.CreateRequest) *httperror
 	h.logger.Info(fmt.Sprintf("[%s]: done", op))
 
 	return nil
+}
+
+func (h RequestService) GetByID(requestID int) (*requestcontract.Request, *httperror.AppError) {
+	const op = "RequestService.GetByID"
+
+	h.logger.Info(fmt.Sprintf("[%s]: starting", op))
+
+	if requestID <= 0 {
+		return nil, httperror.ValidationErr("request id is required", op, nil)
+	}
+
+	_select, _selectErr := h.model.SelectByID(requestID)
+	if _selectErr != nil {
+		return nil, httperror.CatchErr(_selectErr, op)
+	}
+
+	if len(_select) <= 0 {
+		return nil, httperror.NotFoundErr("request not found", op, nil)
+	}
+
+	h.logger.Info(fmt.Sprintf("[%s]: done", op))
+
+	return mapToDomain(_select[0]), nil
 }
 
 func (h RequestService) GetByClientReference(clientReference string) ([]*requestcontract.Request, *httperror.AppError) {

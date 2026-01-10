@@ -284,17 +284,25 @@ func (ctrl RequestCtrl) HandleComplete(c echo.Context) error {
 		return c.JSON(statusCode, httpresponse.Default(err.Error(), statusCode))
 	}
 
-	requestStateKey := constant.RequestStatePending
-	if completeReq.Success {
-		requestStateKey = constant.RequestStateCompleted
+	getRequest, getRequestErr := ctrl.requestService.GetByID(completeReq.RequestID)
+	if getRequestErr != nil {
+		ctrl.logger.AppError(httperror.CatchErr(getRequestErr, op))
+		return c.JSON(getRequestErr.StatusCode(), httpresponse.Default(getRequestErr.Error(), getRequestErr.StatusCode()))
 	}
 
-	if err := ctrl.requestService.StateUpdate(requestcontract.StateUpdateRequest{
-		RequestID:       completeReq.RequestID,
-		RequestStateKey: requestStateKey,
-	}); err != nil {
-		ctrl.logger.AppError(httperror.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+	if getRequest.RequestStateKey == constant.RequestStateInProgress {
+		requestStateKey := constant.RequestStatePending
+		if completeReq.Success {
+			requestStateKey = constant.RequestStateCompleted
+		}
+
+		if err := ctrl.requestService.StateUpdate(requestcontract.StateUpdateRequest{
+			RequestID:       completeReq.RequestID,
+			RequestStateKey: requestStateKey,
+		}); err != nil {
+			ctrl.logger.AppError(httperror.CatchErr(err, op))
+			return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		}
 	}
 
 	statusCode, statusCodeText := httpstatus.Ok()

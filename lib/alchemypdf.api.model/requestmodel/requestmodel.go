@@ -29,6 +29,7 @@ type (
 
 	IRequestModel interface {
 		Insert(payload Schema) ([]*Schema, *httperror.AppError)
+		SelectByID(requestID int) ([]*Schema, *httperror.AppError)
 		SelectByClientReference(clientReference string) ([]*Schema, *httperror.AppError)
 		SelectWithContentByClientReference(clientReference string) ([]*Schema, *httperror.AppError)
 		SelectByState(stateKey string) ([]*Schema, *httperror.AppError)
@@ -88,6 +89,42 @@ func (m RequestModel) Insert(payload Schema) ([]*Schema, *httperror.AppError) {
 		strings.TrimSpace(payload.CallbackURL),
 		payload.AttemptCount,
 		payload.CreatedAt,
+	); err != nil {
+		return nil, httperror.UnknownErr(err.Error(), op, err)
+	}
+
+	return dst, nil
+}
+
+func (m RequestModel) SelectByID(requestID int) ([]*Schema, *httperror.AppError) {
+	const op = "RequestModel.SelectByID"
+
+	const query string = `
+		SELECT r.request_id
+			, r.request_external_id
+			, rs.request_state_key
+			, r.client_reference
+			, r.callback_url
+			, r.attempt_count
+			, r.created_at
+			, r.updated_at
+
+			FROM request r
+
+			INNER JOIN request_state rs
+				ON rs.request_state_id = r.request_state_id
+
+			WHERE r.request_id = $1
+	`
+
+	var dst []*Schema
+
+	if err := pgxscan.Select(
+		context.Background(),
+		m.conn,
+		&dst,
+		query,
+		requestID,
 	); err != nil {
 		return nil, httperror.UnknownErr(err.Error(), op, err)
 	}
