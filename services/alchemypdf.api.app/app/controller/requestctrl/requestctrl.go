@@ -198,6 +198,11 @@ func (ctrl RequestCtrl) HandleGetPending(c echo.Context) error {
 		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
 	}
 
+	if err := ctrl.requestService.AttemptCountIncrement(res.RequestID); err != nil {
+		ctrl.logger.AppError(httperror.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+	}
+
 	statusCode, _ := httpstatus.Ok()
 
 	ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
