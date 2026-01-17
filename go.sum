@@ -189,6 +189,8 @@ github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260109182423-552
 github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260109182423-5525f0ff2c05/go.mod h1:jyAUJ/x6rCBH5d5npmWBqN/RiZjDTUOTyeKCn0mb8lQ=
 github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260109210640-b9b67919f002 h1:8Hc127kI/mcjbhQgL2ZuAdG5uMOczHHAHYbbyIhxAHE=
 github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260109210640-b9b67919f002/go.mod h1:jyAUJ/x6rCBH5d5npmWBqN/RiZjDTUOTyeKCn0mb8lQ=
+github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260117151318-cca1590b1033 h1:prfsjUdOCpvEzeyifKAyi5gYMLdXy+607Ve8gpbB+wE=
+github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260117151318-cca1590b1033/go.mod h1:jyAUJ/x6rCBH5d5npmWBqN/RiZjDTUOTyeKCn0mb8lQ=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

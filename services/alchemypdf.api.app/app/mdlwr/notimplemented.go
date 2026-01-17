@@ -4,8 +4,8 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperror"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponse"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperrorutil"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponseutil"
 )
 
 func (api MiddlewareAPI) NotImplemented(envList []string) func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -23,9 +23,9 @@ func (api MiddlewareAPI) NotImplemented(envList []string) func(next echo.Handler
 			}
 
 			if isNotImplemented {
-				err := httperror.NotImplementedErr("MiddlewareAPI.NotImplemented")
+				err := httperrorutil.NotImplementedErr("MiddlewareAPI.NotImplemented")
 				api.logger.AppError(err)
-				return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+				return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 			}
 
 			return next(c)

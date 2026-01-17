@@ -54,7 +54,7 @@ require (
 	github.com/mailru/easyjson v0.9.1 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260109210640-b9b67919f002 // indirect
+	github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260117151318-cca1590b1033 // indirect
 	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
