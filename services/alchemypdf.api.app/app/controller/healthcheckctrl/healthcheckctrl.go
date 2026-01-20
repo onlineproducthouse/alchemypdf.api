@@ -7,8 +7,8 @@ import (
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/loglocal"
 	"alchemypdf.api/lib/alchemypdf.api.service/healthchecksvc"
 	"github.com/labstack/echo/v4"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponse"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpstatus"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponseutil"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpstatusutil"
 )
 
 type HealthCheck struct {
@@ -32,16 +32,16 @@ func New(logger loglocal.ILogger, hc healthchecksvc.IHealthCheckService, config 
 // @router /HealthCheck/Ping [get]
 // @accept */*
 // @produce json
-// @success 200 {object} httpresponse.Response
-// @Failure 500 {object} httpresponse.Response
+// @success 200 {object} httpresponseutil.Response
+// @Failure 500 {object} httpresponseutil.Response
 func (ctrl HealthCheck) Ping(c echo.Context) error {
 
 	if err := ctrl.hc.Ping(); err != nil {
 		ctrl.logger.Fatal(err.Error())
 	}
 
-	statusCode, statusCodeText := httpstatus.Ok()
+	statusCode, statusCodeText := httpstatusutil.Ok()
 	ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
 
-	return c.JSON(statusCode, httpresponse.Default(statusCodeText, statusCode))
+	return c.JSON(statusCode, httpresponseutil.Default(statusCodeText, statusCode))
 }

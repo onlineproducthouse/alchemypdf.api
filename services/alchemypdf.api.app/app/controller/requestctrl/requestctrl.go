@@ -10,9 +10,9 @@ import (
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/loglocal"
 	"alchemypdf.api/lib/alchemypdf.api.service/requestsvc"
 	"github.com/labstack/echo/v4"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperror"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponse"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpstatus"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperrorutil"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponseutil"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpstatusutil"
 )
 
 type (
@@ -75,8 +75,8 @@ func NewRequestCtrl(
 // @router /v1/Request/Create [post]
 // @accept json
 // @produce json
-// @success 200 {object} httpresponse.Response
-// @Failure 400,500 {object} httpresponse.Response
+// @success 200 {object} httpresponseutil.Response
+// @Failure 400,500 {object} httpresponseutil.Response
 // @param x-api-key header string true "API Key"
 // @param payload body CreateRequest true "CreateRequest"
 func (ctrl RequestCtrl) HandleCreate(c echo.Context) error {
@@ -87,11 +87,11 @@ func (ctrl RequestCtrl) HandleCreate(c echo.Context) error {
 	var req CreateRequest
 	if err := c.Bind(&req); err != nil {
 		ctrl.logger.Debug(`"RequestCtrl.HandleCreate": failed to parse body`)
-		ctrl.logger.AppError(httperror.UnknownErr(err.Error(), op, err))
+		ctrl.logger.AppError(httperrorutil.UnknownErr(err.Error(), op, err))
 
-		statusCode, _ := httpstatus.InternalServerError()
+		statusCode, _ := httpstatusutil.InternalServerError()
 		ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
-		return c.JSON(statusCode, httpresponse.Default(err.Error(), statusCode))
+		return c.JSON(statusCode, httpresponseutil.Default(err.Error(), statusCode))
 	}
 
 	if err := ctrl.requestService.Create(requestcontract.CreateRequest{
@@ -99,16 +99,16 @@ func (ctrl RequestCtrl) HandleCreate(c echo.Context) error {
 		Content:         req.Content,
 		CallbackURL:     req.CallbackURL,
 	}); err != nil {
-		ctrl.logger.AppError(httperror.CatchErr(err, op))
+		ctrl.logger.AppError(httperrorutil.CatchErr(err, op))
 		ctrl.logger.HTTPResponse(err.StatusCode(), c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 	}
 
-	statusCode, statusCodeText := httpstatus.Ok()
+	statusCode, statusCodeText := httpstatusutil.Ok()
 
 	ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
 
-	return c.JSON(statusCode, httpresponse.Default(statusCodeText, statusCode))
+	return c.JSON(statusCode, httpresponseutil.Default(statusCodeText, statusCode))
 }
 
 // Request/GetByClientReference godoc
@@ -119,7 +119,7 @@ func (ctrl RequestCtrl) HandleCreate(c echo.Context) error {
 // @accept json
 // @produce json
 // @success 200 {object} []Request
-// @Failure 400,500 {object} httpresponse.Response
+// @Failure 400,500 {object} httpresponseutil.Response
 // @param x-api-key header string true "API Key"
 // @param ClientReference path string true "ClientReference"
 func (ctrl RequestCtrl) HandleGetByClientReference(c echo.Context) error {
@@ -129,11 +129,11 @@ func (ctrl RequestCtrl) HandleGetByClientReference(c echo.Context) error {
 
 	res, err := ctrl.requestService.GetByClientReference(c.Param("ClientReference"))
 	if err != nil {
-		ctrl.logger.AppError(httperror.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		ctrl.logger.AppError(httperrorutil.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 	}
 
-	statusCode, _ := httpstatus.Ok()
+	statusCode, _ := httpstatusutil.Ok()
 
 	ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
 
@@ -148,7 +148,7 @@ func (ctrl RequestCtrl) HandleGetByClientReference(c echo.Context) error {
 // @accept json
 // @produce json
 // @success 200 {object} []Request
-// @Failure 400,500 {object} httpresponse.Response
+// @Failure 400,500 {object} httpresponseutil.Response
 // @param x-api-key header string true "API Key"
 // @param ClientReference path string true "ClientReference"
 func (ctrl RequestCtrl) HandleGetWithContentByClientReference(c echo.Context) error {
@@ -158,11 +158,11 @@ func (ctrl RequestCtrl) HandleGetWithContentByClientReference(c echo.Context) er
 
 	res, err := ctrl.requestService.GetWithContentByClientReference(c.Param("ClientReference"))
 	if err != nil {
-		ctrl.logger.AppError(httperror.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		ctrl.logger.AppError(httperrorutil.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 	}
 
-	statusCode, _ := httpstatus.Ok()
+	statusCode, _ := httpstatusutil.Ok()
 
 	ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
 
@@ -177,7 +177,7 @@ func (ctrl RequestCtrl) HandleGetWithContentByClientReference(c echo.Context) er
 // @accept json
 // @produce json
 // @success 200 {object} Request
-// @Failure 400,500 {object} httpresponse.Response
+// @Failure 400,500 {object} httpresponseutil.Response
 // @param x-api-key header string true "API Key"
 func (ctrl RequestCtrl) HandleGetPending(c echo.Context) error {
 	const op = "RequestCtrl.HandleGetPending"
@@ -186,24 +186,24 @@ func (ctrl RequestCtrl) HandleGetPending(c echo.Context) error {
 
 	res, err := ctrl.getPending()
 	if err != nil {
-		ctrl.logger.AppError(httperror.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		ctrl.logger.AppError(httperrorutil.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 	}
 
 	if err := ctrl.requestService.StateUpdate(requestcontract.StateUpdateRequest{
 		RequestID:       res.RequestID,
 		RequestStateKey: constant.RequestStateInProgress,
 	}); err != nil {
-		ctrl.logger.AppError(httperror.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		ctrl.logger.AppError(httperrorutil.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 	}
 
 	if err := ctrl.requestService.AttemptCountIncrement(res.RequestID); err != nil {
-		ctrl.logger.AppError(httperror.CatchErr(err, op))
-		return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+		ctrl.logger.AppError(httperrorutil.CatchErr(err, op))
+		return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 	}
 
-	statusCode, _ := httpstatus.Ok()
+	statusCode, _ := httpstatusutil.Ok()
 
 	ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
 
@@ -234,14 +234,14 @@ func mapToDomain(v *requestcontract.Request) *Request {
 	}
 }
 
-func (ctrl RequestCtrl) getPending() (*Request, *httperror.AppError) {
+func (ctrl RequestCtrl) getPending() (*Request, *httperrorutil.AppError) {
 	const op = "RequestCtrl.getPending"
 
 	ctrl.logger.Info(fmt.Sprintf("[%s]: starting", op))
 
 	res, err := ctrl.requestService.GetByState(constant.RequestStatePending)
 	if err != nil {
-		return nil, httperror.CatchErr(err, op)
+		return nil, httperrorutil.CatchErr(err, op)
 	}
 
 	if res.AttemptCount >= 3 {
@@ -249,7 +249,7 @@ func (ctrl RequestCtrl) getPending() (*Request, *httperror.AppError) {
 			RequestID:       res.RequestID,
 			RequestStateKey: constant.RequestStateAttemptLimitReached,
 		}); err != nil {
-			return nil, httperror.CatchErr(err, op)
+			return nil, httperrorutil.CatchErr(err, op)
 		}
 
 		return ctrl.getPending()
@@ -265,8 +265,8 @@ func (ctrl RequestCtrl) getPending() (*Request, *httperror.AppError) {
 // @router /v1/Request/Complete [post]
 // @accept json
 // @produce json
-// @success 200 {object} httpresponse.Response
-// @Failure 400,500 {object} httpresponse.Response
+// @success 200 {object} httpresponseutil.Response
+// @Failure 400,500 {object} httpresponseutil.Response
 // @param x-api-key header string true "API Key"
 // @param payload body CompleteRequest true "CompleteRequest"
 func (ctrl RequestCtrl) HandleComplete(c echo.Context) error {
@@ -277,17 +277,17 @@ func (ctrl RequestCtrl) HandleComplete(c echo.Context) error {
 	var completeReq CompleteRequest
 	if err := c.Bind(&completeReq); err != nil {
 		ctrl.logger.Debug(fmt.Sprintf("[%s]: failed to parse body", op))
-		ctrl.logger.AppError(httperror.UnknownErr(err.Error(), op, err))
+		ctrl.logger.AppError(httperrorutil.UnknownErr(err.Error(), op, err))
 
-		statusCode, _ := httpstatus.InternalServerError()
+		statusCode, _ := httpstatusutil.InternalServerError()
 		ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
-		return c.JSON(statusCode, httpresponse.Default(err.Error(), statusCode))
+		return c.JSON(statusCode, httpresponseutil.Default(err.Error(), statusCode))
 	}
 
 	getRequest, getRequestErr := ctrl.requestService.GetByID(completeReq.RequestID)
 	if getRequestErr != nil {
-		ctrl.logger.AppError(httperror.CatchErr(getRequestErr, op))
-		return c.JSON(getRequestErr.StatusCode(), httpresponse.Default(getRequestErr.Error(), getRequestErr.StatusCode()))
+		ctrl.logger.AppError(httperrorutil.CatchErr(getRequestErr, op))
+		return c.JSON(getRequestErr.StatusCode(), httpresponseutil.Default(getRequestErr.Error(), getRequestErr.StatusCode()))
 	}
 
 	if getRequest.RequestStateKey == constant.RequestStateInProgress {
@@ -300,11 +300,11 @@ func (ctrl RequestCtrl) HandleComplete(c echo.Context) error {
 			RequestID:       completeReq.RequestID,
 			RequestStateKey: requestStateKey,
 		}); err != nil {
-			ctrl.logger.AppError(httperror.CatchErr(err, op))
-			return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+			ctrl.logger.AppError(httperrorutil.CatchErr(err, op))
+			return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 		}
 	}
 
-	statusCode, statusCodeText := httpstatus.Ok()
-	return c.JSON(statusCode, httpresponse.Default(statusCodeText, statusCode))
+	statusCode, statusCodeText := httpstatusutil.Ok()
+	return c.JSON(statusCode, httpresponseutil.Default(statusCodeText, statusCode))
 }
