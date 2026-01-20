@@ -19,11 +19,11 @@ func (c TConfig) EnvName() string {
 }
 
 func (c TConfig) Host() string {
-	return get("API_HOST")
+	return get("ALCHEMYPDF_HOST")
 }
 
 func (c TConfig) Port() string {
-	return get("API_PORT")
+	return get("ALCHEMYPDF_PORT")
 }
 
 func (c TConfig) ReqHeaderApiKey() string {
@@ -41,17 +41,17 @@ func (c TConfig) RequestIDKey() string {
 func (c TConfig) DbConnectionString() string {
 	return fmt.Sprintf(
 		"%s://%s:%s@%s:%s/%s",
-		get("DB_PROTOCOL"),
-		get("DB_USERNAME"),
-		url.QueryEscape(get("DB_PASSWORD")),
-		get("DB_HOST"),
-		get("DB_PORT"),
-		get("DB_NAME"),
+		get("ALCHEMYPDF_DB_PROTOCOL"),
+		get("ALCHEMYPDF_DB_USERNAME"),
+		url.QueryEscape(get("ALCHEMYPDF_DB_PASSWORD")),
+		get("ALCHEMYPDF_DB_HOST"),
+		get("ALCHEMYPDF_DB_PORT"),
+		get("ALCHEMYPDF_DB_NAME"),
 	)
 }
 
 func (c TConfig) APIKeys() []string {
-	return strings.Split(get("API_KEYS"), ",")
+	return strings.Split(get("ALCHEMYPDF_KEYS"), ",")
 }
 
 func (c TConfig) RunSwagger() bool {
