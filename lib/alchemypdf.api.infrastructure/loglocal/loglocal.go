@@ -5,7 +5,7 @@ import (
 
 	constant "alchemypdf.api/lib/alchemypdf.api.constant"
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/config"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperror"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperrorutil"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -22,7 +22,7 @@ type ILogger interface {
 	Fatal(msg string)
 	Panic(msg string)
 
-	AppError(err httperror.IAppError)
+	AppError(err httperrorutil.IAppError)
 
 	HTTPRequest(method, url, requestID string)
 	HTTPResponse(status int, method, url, requestID string)

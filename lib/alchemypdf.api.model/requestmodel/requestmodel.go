@@ -8,7 +8,7 @@ import (
 
 	"github.com/georgysavva/scany/pgxscan"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperror"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperrorutil"
 )
 
 type (
@@ -28,13 +28,13 @@ type (
 	}
 
 	IRequestModel interface {
-		Insert(payload Schema) ([]*Schema, *httperror.AppError)
-		SelectByID(requestID int) ([]*Schema, *httperror.AppError)
-		SelectByClientReference(clientReference string) ([]*Schema, *httperror.AppError)
-		SelectWithContentByClientReference(clientReference string) ([]*Schema, *httperror.AppError)
-		SelectByState(stateKey string) ([]*Schema, *httperror.AppError)
-		StateUpdate(payload Schema) ([]*Schema, *httperror.AppError)
-		AttemptCountIncrement(payload Schema) ([]*Schema, *httperror.AppError)
+		Insert(payload Schema) ([]*Schema, *httperrorutil.AppError)
+		SelectByID(requestID int) ([]*Schema, *httperrorutil.AppError)
+		SelectByClientReference(clientReference string) ([]*Schema, *httperrorutil.AppError)
+		SelectWithContentByClientReference(clientReference string) ([]*Schema, *httperrorutil.AppError)
+		SelectByState(stateKey string) ([]*Schema, *httperrorutil.AppError)
+		StateUpdate(payload Schema) ([]*Schema, *httperrorutil.AppError)
+		AttemptCountIncrement(payload Schema) ([]*Schema, *httperrorutil.AppError)
 	}
 
 	RequestModel struct {
@@ -46,7 +46,7 @@ func NewRequestModel(conn *pgxpool.Pool) RequestModel {
 	return RequestModel{conn}
 }
 
-func (m RequestModel) Insert(payload Schema) ([]*Schema, *httperror.AppError) {
+func (m RequestModel) Insert(payload Schema) ([]*Schema, *httperrorutil.AppError) {
 	const op = "RequestModel.Insert"
 
 	const query string = `
@@ -90,13 +90,13 @@ func (m RequestModel) Insert(payload Schema) ([]*Schema, *httperror.AppError) {
 		payload.AttemptCount,
 		payload.CreatedAt,
 	); err != nil {
-		return nil, httperror.UnknownErr(err.Error(), op, err)
+		return nil, httperrorutil.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) SelectByID(requestID int) ([]*Schema, *httperror.AppError) {
+func (m RequestModel) SelectByID(requestID int) ([]*Schema, *httperrorutil.AppError) {
 	const op = "RequestModel.SelectByID"
 
 	const query string = `
@@ -126,13 +126,13 @@ func (m RequestModel) SelectByID(requestID int) ([]*Schema, *httperror.AppError)
 		query,
 		requestID,
 	); err != nil {
-		return nil, httperror.UnknownErr(err.Error(), op, err)
+		return nil, httperrorutil.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) SelectByClientReference(clientReference string) ([]*Schema, *httperror.AppError) {
+func (m RequestModel) SelectByClientReference(clientReference string) ([]*Schema, *httperrorutil.AppError) {
 	const op = "RequestModel.SelectByClientReference"
 
 	const query string = `
@@ -162,13 +162,13 @@ func (m RequestModel) SelectByClientReference(clientReference string) ([]*Schema
 		query,
 		clientReference,
 	); err != nil {
-		return nil, httperror.UnknownErr(err.Error(), op, err)
+		return nil, httperrorutil.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) SelectWithContentByClientReference(clientReference string) ([]*Schema, *httperror.AppError) {
+func (m RequestModel) SelectWithContentByClientReference(clientReference string) ([]*Schema, *httperrorutil.AppError) {
 	const op = "RequestModel.SelectWithContentByClientReference"
 
 	const query string = `
@@ -199,13 +199,13 @@ func (m RequestModel) SelectWithContentByClientReference(clientReference string)
 		query,
 		clientReference,
 	); err != nil {
-		return nil, httperror.UnknownErr(err.Error(), op, err)
+		return nil, httperrorutil.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) SelectByState(stateKey string) ([]*Schema, *httperror.AppError) {
+func (m RequestModel) SelectByState(stateKey string) ([]*Schema, *httperrorutil.AppError) {
 	const op = "RequestModel.SelectByState"
 
 	const query string = `
@@ -239,13 +239,13 @@ func (m RequestModel) SelectByState(stateKey string) ([]*Schema, *httperror.AppE
 		query,
 		stateKey,
 	); err != nil {
-		return nil, httperror.UnknownErr(err.Error(), op, err)
+		return nil, httperrorutil.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) StateUpdate(payload Schema) ([]*Schema, *httperror.AppError) {
+func (m RequestModel) StateUpdate(payload Schema) ([]*Schema, *httperrorutil.AppError) {
 	const op = "RequestModel.StateUpdate"
 
 	const query string = `
@@ -270,13 +270,13 @@ func (m RequestModel) StateUpdate(payload Schema) ([]*Schema, *httperror.AppErro
 		payload.UpdatedAt.Time,
 		strings.TrimSpace(payload.RequestStateKey),
 	); err != nil {
-		return nil, httperror.UnknownErr(err.Error(), op, err)
+		return nil, httperrorutil.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil
 }
 
-func (m RequestModel) AttemptCountIncrement(payload Schema) ([]*Schema, *httperror.AppError) {
+func (m RequestModel) AttemptCountIncrement(payload Schema) ([]*Schema, *httperrorutil.AppError) {
 	const op = "RequestModel.AttemptCountIncrement"
 
 	const query string = `
@@ -300,7 +300,7 @@ func (m RequestModel) AttemptCountIncrement(payload Schema) ([]*Schema, *httperr
 		payload.RequestID,
 		payload.UpdatedAt.Time,
 	); err != nil {
-		return nil, httperror.UnknownErr(err.Error(), op, err)
+		return nil, httperrorutil.UnknownErr(err.Error(), op, err)
 	}
 
 	return dst, nil

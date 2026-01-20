@@ -31,7 +31,6 @@ COPY ./lib/alchemypdf.api.ioc ./lib/alchemypdf.api.ioc
 COPY ./lib/alchemypdf.api.model ./lib/alchemypdf.api.model
 COPY ./lib/alchemypdf.api.service ./lib/alchemypdf.api.service
 COPY ./lib/alchemypdf.api.testhelpers ./lib/alchemypdf.api.testhelpers
-COPY ./lib/alchemypdf.api.util ./lib/alchemypdf.api.util
 
 COPY ./services/alchemypdf.api.app ./services/alchemypdf.api.app
 

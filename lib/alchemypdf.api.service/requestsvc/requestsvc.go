@@ -10,7 +10,7 @@ import (
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/loglocal"
 	"alchemypdf.api/lib/alchemypdf.api.model/requestmodel"
 	"github.com/google/uuid"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperror"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperrorutil"
 )
 
 type RequestService struct {
@@ -19,13 +19,13 @@ type RequestService struct {
 }
 
 type IRequestService interface {
-	Create(payload requestcontract.CreateRequest) *httperror.AppError
-	GetByID(requestID int) (*requestcontract.Request, *httperror.AppError)
-	GetByClientReference(clientReference string) ([]*requestcontract.Request, *httperror.AppError)
-	GetWithContentByClientReference(clientReference string) ([]*requestcontract.Request, *httperror.AppError)
-	GetByState(stateKey string) (*requestcontract.Request, *httperror.AppError)
-	StateUpdate(payload requestcontract.StateUpdateRequest) *httperror.AppError
-	AttemptCountIncrement(requestId int) *httperror.AppError
+	Create(payload requestcontract.CreateRequest) *httperrorutil.AppError
+	GetByID(requestID int) (*requestcontract.Request, *httperrorutil.AppError)
+	GetByClientReference(clientReference string) ([]*requestcontract.Request, *httperrorutil.AppError)
+	GetWithContentByClientReference(clientReference string) ([]*requestcontract.Request, *httperrorutil.AppError)
+	GetByState(stateKey string) (*requestcontract.Request, *httperrorutil.AppError)
+	StateUpdate(payload requestcontract.StateUpdateRequest) *httperrorutil.AppError
+	AttemptCountIncrement(requestId int) *httperrorutil.AppError
 }
 
 func NewRequestService(
@@ -38,21 +38,21 @@ func NewRequestService(
 	}
 }
 
-func (h RequestService) Create(payload requestcontract.CreateRequest) *httperror.AppError {
+func (h RequestService) Create(payload requestcontract.CreateRequest) *httperrorutil.AppError {
 	const op = "RequestService.Create"
 
 	h.logger.Info(fmt.Sprintf("[%s]: starting", op))
 
 	if payload.ClientReference == "" {
-		return httperror.ValidationErr("request client reference is required", op, nil)
+		return httperrorutil.ValidationErr("request client reference is required", op, nil)
 	}
 
 	if payload.Content == "" {
-		return httperror.ValidationErr("request content is required", op, nil)
+		return httperrorutil.ValidationErr("request content is required", op, nil)
 	}
 
 	if payload.CallbackURL == "" {
-		return httperror.ValidationErr("request callback url is required", op, nil)
+		return httperrorutil.ValidationErr("request callback url is required", op, nil)
 	}
 
 	_create, _createErr := h.model.Insert(requestmodel.Schema{
@@ -65,11 +65,11 @@ func (h RequestService) Create(payload requestcontract.CreateRequest) *httperror
 		CreatedAt:         time.Now(),
 	})
 	if _createErr != nil {
-		return httperror.CatchErr(_createErr, op)
+		return httperrorutil.CatchErr(_createErr, op)
 	}
 
 	if len(_create) <= 0 {
-		return httperror.UnknownErr("failed to create request", op, nil)
+		return httperrorutil.UnknownErr("failed to create request", op, nil)
 	}
 
 	h.logger.Info(fmt.Sprintf("[%s]: done", op))
@@ -77,22 +77,22 @@ func (h RequestService) Create(payload requestcontract.CreateRequest) *httperror
 	return nil
 }
 
-func (h RequestService) GetByID(requestID int) (*requestcontract.Request, *httperror.AppError) {
+func (h RequestService) GetByID(requestID int) (*requestcontract.Request, *httperrorutil.AppError) {
 	const op = "RequestService.GetByID"
 
 	h.logger.Info(fmt.Sprintf("[%s]: starting", op))
 
 	if requestID <= 0 {
-		return nil, httperror.ValidationErr("request id is required", op, nil)
+		return nil, httperrorutil.ValidationErr("request id is required", op, nil)
 	}
 
 	_select, _selectErr := h.model.SelectByID(requestID)
 	if _selectErr != nil {
-		return nil, httperror.CatchErr(_selectErr, op)
+		return nil, httperrorutil.CatchErr(_selectErr, op)
 	}
 
 	if len(_select) <= 0 {
-		return nil, httperror.NotFoundErr("request not found", op, nil)
+		return nil, httperrorutil.NotFoundErr("request not found", op, nil)
 	}
 
 	h.logger.Info(fmt.Sprintf("[%s]: done", op))
@@ -100,18 +100,18 @@ func (h RequestService) GetByID(requestID int) (*requestcontract.Request, *httpe
 	return mapToDomain(_select[0]), nil
 }
 
-func (h RequestService) GetByClientReference(clientReference string) ([]*requestcontract.Request, *httperror.AppError) {
+func (h RequestService) GetByClientReference(clientReference string) ([]*requestcontract.Request, *httperrorutil.AppError) {
 	const op = "RequestService.GetByClientReference"
 
 	h.logger.Info(fmt.Sprintf("[%s]: starting", op))
 
 	if clientReference == "" {
-		return nil, httperror.ValidationErr("request client reference is required", op, nil)
+		return nil, httperrorutil.ValidationErr("request client reference is required", op, nil)
 	}
 
 	_select, _selectErr := h.model.SelectByClientReference(clientReference)
 	if _selectErr != nil {
-		return nil, httperror.CatchErr(_selectErr, op)
+		return nil, httperrorutil.CatchErr(_selectErr, op)
 	}
 
 	h.logger.Info(fmt.Sprintf("[%s]: done", op))
@@ -119,18 +119,18 @@ func (h RequestService) GetByClientReference(clientReference string) ([]*request
 	return mapListToDomain(_select), nil
 }
 
-func (h RequestService) GetWithContentByClientReference(clientReference string) ([]*requestcontract.Request, *httperror.AppError) {
+func (h RequestService) GetWithContentByClientReference(clientReference string) ([]*requestcontract.Request, *httperrorutil.AppError) {
 	const op = "RequestService.GetWithContentByClientReference"
 
 	h.logger.Info(fmt.Sprintf("[%s]: starting", op))
 
 	if clientReference == "" {
-		return nil, httperror.ValidationErr("request client reference is required", op, nil)
+		return nil, httperrorutil.ValidationErr("request client reference is required", op, nil)
 	}
 
 	_select, _selectErr := h.model.SelectWithContentByClientReference(clientReference)
 	if _selectErr != nil {
-		return nil, httperror.CatchErr(_selectErr, op)
+		return nil, httperrorutil.CatchErr(_selectErr, op)
 	}
 
 	h.logger.Info(fmt.Sprintf("[%s]: done", op))
@@ -138,22 +138,22 @@ func (h RequestService) GetWithContentByClientReference(clientReference string) 
 	return mapListToDomain(_select), nil
 }
 
-func (h RequestService) GetByState(stateKey string) (*requestcontract.Request, *httperror.AppError) {
+func (h RequestService) GetByState(stateKey string) (*requestcontract.Request, *httperrorutil.AppError) {
 	const op = "RequestService.GetByState"
 
 	h.logger.Info(fmt.Sprintf("[%s]: starting", op))
 
 	if stateKey == "" {
-		return nil, httperror.ValidationErr("request state key is required", op, nil)
+		return nil, httperrorutil.ValidationErr("request state key is required", op, nil)
 	}
 
 	_select, _selectErr := h.model.SelectByState(stateKey)
 	if _selectErr != nil {
-		return nil, httperror.CatchErr(_selectErr, op)
+		return nil, httperrorutil.CatchErr(_selectErr, op)
 	}
 
 	if len(_select) <= 0 {
-		return nil, httperror.NotFoundErr("request not found", op, nil)
+		return nil, httperrorutil.NotFoundErr("request not found", op, nil)
 	}
 
 	h.logger.Info(fmt.Sprintf("[%s]: done", op))
@@ -185,17 +185,17 @@ func mapToDomain(v *requestmodel.Schema) *requestcontract.Request {
 	}
 }
 
-func (h RequestService) StateUpdate(payload requestcontract.StateUpdateRequest) *httperror.AppError {
+func (h RequestService) StateUpdate(payload requestcontract.StateUpdateRequest) *httperrorutil.AppError {
 	const op = "RequestService.StateUpdate"
 
 	h.logger.Info(fmt.Sprintf("[%s]: starting", op))
 
 	if payload.RequestID <= 0 {
-		return httperror.ValidationErr("request id must be greater than zero", op, nil)
+		return httperrorutil.ValidationErr("request id must be greater than zero", op, nil)
 	}
 
 	if payload.RequestStateKey == "" {
-		return httperror.ValidationErr("request state key is required", op, nil)
+		return httperrorutil.ValidationErr("request state key is required", op, nil)
 	}
 
 	updateState, updateStateErr := h.model.StateUpdate(requestmodel.Schema{
@@ -205,11 +205,11 @@ func (h RequestService) StateUpdate(payload requestcontract.StateUpdateRequest) 
 	})
 	if updateStateErr != nil {
 		h.logger.AppError(updateStateErr)
-		return httperror.CatchErr(updateStateErr, op)
+		return httperrorutil.CatchErr(updateStateErr, op)
 	}
 
 	if len(updateState) <= 0 {
-		return httperror.UnknownErr("failed to update request state", op, nil)
+		return httperrorutil.UnknownErr("failed to update request state", op, nil)
 	}
 
 	h.logger.Info(fmt.Sprintf("[%s]: done", op))
@@ -217,13 +217,13 @@ func (h RequestService) StateUpdate(payload requestcontract.StateUpdateRequest) 
 	return nil
 }
 
-func (h RequestService) AttemptCountIncrement(requestId int) *httperror.AppError {
+func (h RequestService) AttemptCountIncrement(requestId int) *httperrorutil.AppError {
 	const op = "RequestService.AttemptCountIncrement"
 
 	h.logger.Info(fmt.Sprintf("[%s]: starting", op))
 
 	if requestId <= 0 {
-		return httperror.ValidationErr("request id must be greater than zero", op, nil)
+		return httperrorutil.ValidationErr("request id must be greater than zero", op, nil)
 	}
 
 	attemptCountIncrement, attemptCountIncrementErr := h.model.AttemptCountIncrement(requestmodel.Schema{
@@ -232,11 +232,11 @@ func (h RequestService) AttemptCountIncrement(requestId int) *httperror.AppError
 	})
 	if attemptCountIncrementErr != nil {
 		h.logger.AppError(attemptCountIncrementErr)
-		return httperror.CatchErr(attemptCountIncrementErr, op)
+		return httperrorutil.CatchErr(attemptCountIncrementErr, op)
 	}
 
 	if len(attemptCountIncrement) <= 0 {
-		return httperror.UnknownErr("failed to update request attempt count", op, nil)
+		return httperrorutil.UnknownErr("failed to update request attempt count", op, nil)
 	}
 
 	h.logger.Info(fmt.Sprintf("[%s]: done", op))

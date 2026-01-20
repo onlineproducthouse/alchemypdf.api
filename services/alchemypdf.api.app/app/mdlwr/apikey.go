@@ -6,8 +6,8 @@ import (
 	"slices"
 
 	"github.com/labstack/echo/v4"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperror"
-	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponse"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperrorutil"
+	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponseutil"
 )
 
 func (api MiddlewareAPI) APIKey(next echo.HandlerFunc) echo.HandlerFunc {
@@ -19,11 +19,11 @@ func (api MiddlewareAPI) APIKey(next echo.HandlerFunc) echo.HandlerFunc {
 		apiKey := c.Request().Header.Get(api.config.ReqHeaderApiKey())
 		if apiKey == "" {
 			msg := "api key not found"
-			err := httperror.NotFoundErr(msg, op, errors.New(msg))
+			err := httperrorutil.NotFoundErr(msg, op, errors.New(msg))
 
 			api.logger.AppError(err)
 
-			return c.JSON(err.StatusCode(), httpresponse.Default(err.Error(), err.StatusCode()))
+			return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 		}
 
 		if slices.Contains(api.config.APIKeys(), apiKey) {

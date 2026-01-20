@@ -15,7 +15,7 @@ Now you can either run the VSCode debugger to execute the project or execute the
 
 ```bash
 # API
-$ export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && go run ./services/alchemypdf.api.app/main.go
+export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && go run ./services/alchemypdf.api.app/main.go
 ```
 
 In the logs, the API will output something like:
@@ -39,7 +39,7 @@ You can open Swagger with this URL: `http://127.0.0.1:7890/swagger/`
 To have environment dependencies set up, execute command:
 
 ```bash
-$ export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) &&  docker compose -f 'docker-compose.debug.yml' up --build
+export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) &&  docker compose -f 'docker-compose.debug.yml' up --build
 ```
 
 ## Unit tests
@@ -48,6 +48,6 @@ There are only two areas focused on for Unit Tests, being the utilities and doma
 
 For testing services:
 ```bash
-$ go test ./lib/alchemypdf.api.service/... -coverprofile=coverage-service.out
-$ go tool cover -html=coverage-service.out
+go test ./lib/alchemypdf.api.service/... -coverprofile=coverage-service.out
+go tool cover -html=coverage-service.out
 ```
