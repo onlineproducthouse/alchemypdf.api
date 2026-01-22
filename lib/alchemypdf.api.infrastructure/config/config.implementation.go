@@ -23,11 +23,11 @@ func (c TConfig) RunSwagger() bool {
 }
 
 func (c TConfig) Host() string {
-	return get("ALCHEMYPDF_HOST")
+	return get("API_HOST")
 }
 
 func (c TConfig) Port() string {
-	return get("ALCHEMYPDF_PORT")
+	return get("API_PORT")
 }
 
 func (c TConfig) APIKeys() []string {
@@ -37,12 +37,12 @@ func (c TConfig) APIKeys() []string {
 func (c TConfig) DbConnectionString() string {
 	return fmt.Sprintf(
 		"%s://%s:%s@%s:%s/%s",
-		get("ALCHEMYPDF_DB_PROTOCOL"),
-		get("ALCHEMYPDF_DB_USERNAME"),
-		url.QueryEscape(get("ALCHEMYPDF_DB_PASSWORD")),
-		get("ALCHEMYPDF_DB_HOST"),
-		get("ALCHEMYPDF_DB_PORT"),
-		get("ALCHEMYPDF_DB_NAME"),
+		get("DB_PROTOCOL"),
+		get("DB_USERNAME"),
+		url.QueryEscape(get("DB_PASSWORD")),
+		get("DB_HOST"),
+		get("DB_PORT"),
+		get("DB_NAME"),
 	)
 }
 
