@@ -22,6 +22,7 @@ type (
 		HandleGetWithContentByClientReference(c echo.Context) error
 		HandleGetPending(c echo.Context) error
 		HandleComplete(c echo.Context) error
+		HandleCallback(c echo.Context) error
 	}
 
 	RequestCtrl struct {
@@ -53,6 +54,11 @@ type (
 	CompleteRequest struct {
 		Success   bool `json:"success"`
 		RequestID int  `json:"requestId"`
+	}
+
+	CallbackRequest struct {
+		Success   bool   `json:"success"`
+		PDFString string `json:"pdfString"`
 	}
 )
 
@@ -304,6 +310,38 @@ func (ctrl RequestCtrl) HandleComplete(c echo.Context) error {
 			return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 		}
 	}
+
+	statusCode, statusCodeText := httpstatusutil.Ok()
+	return c.JSON(statusCode, httpresponseutil.Default(statusCodeText, statusCode))
+}
+
+// Request/Callback godoc
+// @id Request.Callback
+// @tags Request
+// @summary Callback for integration tests
+// @router /v1/Request/Callback [post]
+// @accept json
+// @produce json
+// @success 200 {object} httpresponseutil.Response
+// @Failure 400,500 {object} httpresponseutil.Response
+// @param payload body CallbackRequest true "CallbackRequest"
+func (ctrl RequestCtrl) HandleCallback(c echo.Context) error {
+	const op = "RequestCtrl.HandleCallback"
+
+	ctrl.logger.Info(fmt.Sprintf("[%s]: starting", op))
+
+	var completeReq CallbackRequest
+	if err := c.Bind(&completeReq); err != nil {
+		ctrl.logger.Debug(fmt.Sprintf("[%s]: failed to parse body", op))
+		ctrl.logger.AppError(httperrorutil.UnknownErr(err.Error(), op, err))
+
+		statusCode, _ := httpstatusutil.InternalServerError()
+		ctrl.logger.HTTPResponse(statusCode, c.Request().Method, c.Request().RequestURI, fmt.Sprint(c.Get(ctrl.config.RequestIDKey())))
+		return c.JSON(statusCode, httpresponseutil.Default(err.Error(), statusCode))
+	}
+
+	ctrl.logger.Info(fmt.Sprintf("completeReq: %t", completeReq.Success))
+	ctrl.logger.Info(fmt.Sprintf("completeReq: %d", len(completeReq.PDFString)))
 
 	statusCode, statusCodeText := httpstatusutil.Ok()
 	return c.JSON(statusCode, httpresponseutil.Default(statusCodeText, statusCode))

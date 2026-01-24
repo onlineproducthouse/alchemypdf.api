@@ -71,4 +71,5 @@ func (r Router) buildRequestRouters(apiGroupV1 *echo.Group) {
 	group.GET("/GetWithContentByClientReference/:ClientReference", ctrl.HandleGetWithContentByClientReference)
 	group.GET("/GetPending", ctrl.HandleGetPending)
 	group.POST("/Complete", ctrl.HandleComplete)
+	group.POST("/Callback", ctrl.HandleCallback, r.middleware.NotImplemented([]string{constant.ENV_PROD}))
 }
