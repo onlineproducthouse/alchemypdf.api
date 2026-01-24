@@ -11,11 +11,11 @@ func (c TConfig) EnvName() string {
 }
 
 func (c TConfig) ProjectName() string {
-	return get("PROJECT_NAME")
+	return get("ALCHEMYPDF_PROJECT_NAME")
 }
 
 func (c TConfig) ProjectShortName() string {
-	return get("PROJECT_SHORT_NAME")
+	return get("ALCHEMYPDF_PROJECT_SHORT_NAME")
 }
 
 func (c TConfig) RunSwagger() bool {
@@ -23,26 +23,26 @@ func (c TConfig) RunSwagger() bool {
 }
 
 func (c TConfig) Host() string {
-	return get("API_HOST")
+	return get("ALCHEMYPDF_API_HOST")
 }
 
 func (c TConfig) Port() string {
-	return get("API_PORT")
+	return get("ALCHEMYPDF_API_PORT")
 }
 
 func (c TConfig) APIKeys() []string {
-	return strings.Split(get("API_KEYS"), ",")
+	return strings.Split(get("ALCHEMYPDF_API_KEYS"), ",")
 }
 
 func (c TConfig) DbConnectionString() string {
 	return fmt.Sprintf(
 		"%s://%s:%s@%s:%s/%s",
-		get("DB_PROTOCOL"),
-		get("DB_USERNAME"),
-		url.QueryEscape(get("DB_PASSWORD")),
-		get("DB_HOST"),
-		get("DB_PORT"),
-		get("DB_NAME"),
+		get("ALCHEMYPDF_DB_PROTOCOL"),
+		get("ALCHEMYPDF_DB_USERNAME"),
+		url.QueryEscape(get("ALCHEMYPDF_DB_PASSWORD")),
+		get("ALCHEMYPDF_DB_HOST"),
+		get("ALCHEMYPDF_DB_PORT"),
+		get("ALCHEMYPDF_DB_NAME"),
 	)
 }
 

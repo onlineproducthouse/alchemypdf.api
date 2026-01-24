@@ -30,10 +30,10 @@ services:
       context: "./"
       dockerfile: "Dockerfile"
       args:
-        ALCHEMYPDF_PORT: ${ALCHEMYPDF_PORT}
+        ALCHEMYPDF_API_PORT: ${ALCHEMYPDF_API_PORT}
         IMAGE_REGISTRY_BASE_URL: ${IMAGE_REGISTRY_BASE_URL}
     ports:
-      - "${ALCHEMYPDF_PORT}:${ALCHEMYPDF_PORT}"
+      - "${ALCHEMYPDF_API_PORT}:${ALCHEMYPDF_API_PORT}"
     env_file:
       - .env
     environment:
