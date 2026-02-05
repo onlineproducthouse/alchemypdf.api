@@ -6,36 +6,32 @@ import (
 	"strings"
 )
 
-func (c TConfig) ProjectName() string {
-	return get("PROJECT_NAME")
-}
-
-func (c TConfig) ProjectShortName() string {
-	return get("PROJECT_SHORT_NAME")
-}
-
 func (c TConfig) EnvName() string {
 	return get("ENVIRONMENT_NAME")
 }
 
+func (c TConfig) ProjectName() string {
+	return get("ALCHEMYPDF_PROJECT_NAME")
+}
+
+func (c TConfig) ProjectShortName() string {
+	return get("ALCHEMYPDF_PROJECT_SHORT_NAME")
+}
+
+func (c TConfig) RunSwagger() bool {
+	return get("RUN_SWAGGER") == "true"
+}
+
 func (c TConfig) Host() string {
-	return get("ALCHEMYPDF_HOST")
+	return get("ALCHEMYPDF_API_HOST")
 }
 
 func (c TConfig) Port() string {
-	return get("ALCHEMYPDF_PORT")
+	return get("ALCHEMYPDF_API_PORT")
 }
 
-func (c TConfig) ReqHeaderApiKey() string {
-	return "x-api-key"
-}
-
-func (c TConfig) ReqHeaderRequestID() string {
-	return "x-request-id"
-}
-
-func (c TConfig) RequestIDKey() string {
-	return "x-request-id"
+func (c TConfig) APIKeys() []string {
+	return strings.Split(get("ALCHEMYPDF_API_KEYS"), ",")
 }
 
 func (c TConfig) DbConnectionString() string {
@@ -50,10 +46,14 @@ func (c TConfig) DbConnectionString() string {
 	)
 }
 
-func (c TConfig) APIKeys() []string {
-	return strings.Split(get("ALCHEMYPDF_KEYS"), ",")
+func (c TConfig) ReqHeaderApiKey() string {
+	return "x-api-key"
 }
 
-func (c TConfig) RunSwagger() bool {
-	return get("RUN_SWAGGER") == "true"
+func (c TConfig) ReqHeaderRequestID() string {
+	return "x-request-id"
+}
+
+func (c TConfig) RequestIDKey() string {
+	return "x-request-id"
 }
