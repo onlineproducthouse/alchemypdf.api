@@ -330,8 +330,8 @@ func (ctrl RequestCtrl) HandleCallback(c echo.Context) error {
 
 	ctrl.logger.Info(fmt.Sprintf("[%s]: starting", op))
 
-	var completeReq CallbackRequest
-	if err := c.Bind(&completeReq); err != nil {
+	var callbackReq CallbackRequest
+	if err := c.Bind(&callbackReq); err != nil {
 		ctrl.logger.Debug(fmt.Sprintf("[%s]: failed to parse body", op))
 		ctrl.logger.AppError(httperrorutil.UnknownErr(err.Error(), op, err))
 
@@ -340,8 +340,8 @@ func (ctrl RequestCtrl) HandleCallback(c echo.Context) error {
 		return c.JSON(statusCode, httpresponseutil.Default(err.Error(), statusCode))
 	}
 
-	ctrl.logger.Info(fmt.Sprintf("completeReq: %t", completeReq.Success))
-	ctrl.logger.Info(fmt.Sprintf("completeReq: %d", len(completeReq.PDFString)))
+	ctrl.logger.Info(fmt.Sprintf("callbackReq: %t", callbackReq.Success))
+	ctrl.logger.Info(fmt.Sprintf("callbackReq: %d", len(callbackReq.PDFString)))
 
 	statusCode, statusCodeText := httpstatusutil.Ok()
 	return c.JSON(statusCode, httpresponseutil.Default(statusCodeText, statusCode))
