@@ -4,7 +4,7 @@ AlcheMyPDF API project
 
 ## Dependencies
 
-A running instance of PostreSQL is required and [database migrations](https://github.com/onlineproducthouse/alchemypdf.db/blob/main/README.md) must have been executed.
+[AlcheMyPDF database migrations](https://github.com/onlineproducthouse/alchemypdf.db/blob/main/README.md) must have been executed.
 
 ## Installation
 
@@ -31,12 +31,13 @@ export ENVIRONMENT_NAME=local
 # set environment variables for the API
 export RUN_SWAGGER=true
 
-export ALCHEMYPDF_API_HOST=127.0.0.1
-export ALCHEMYPDF_API_KEYS=69d2eddc-2cc9-acab-1a9c-dfcb1fca3efb
-export ALCHEMYPDF_API_PORT=10000
-export ALCHEMYPDF_API_PROTOCOL=http
 export ALCHEMYPDF_PROJECT_NAME=AlcheMyPDF
 export ALCHEMYPDF_PROJECT_SHORT_NAME=AlcheMyPDF
+
+export ALCHEMYPDF_API_PROTOCOL=http
+export ALCHEMYPDF_API_HOST=127.0.0.1
+export ALCHEMYPDF_API_PORT=10000
+export ALCHEMYPDF_API_KEYS=69d2eddc-2cc9-acab-1a9c-dfcb1fca3efb
 
 # initialise swagger docs
 $(go env GOPATH)/bin/swag init --parseDependency -g services/alchemypdf.api.app/app/app.go
