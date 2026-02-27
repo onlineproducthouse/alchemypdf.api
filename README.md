@@ -1,6 +1,6 @@
 # AlcheMyPDF API
 
-AlcheMyPDF database migrations project
+AlcheMyPDF API project
 
 ## Dependencies
 
