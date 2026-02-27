@@ -4,7 +4,8 @@ AlcheMyPDF API project
 
 ## Dependencies
 
-A running instance of PostreSQL is required and [database migrations](https://github.com/onlineproducthouse/alchemypdf.db/blob/main/README.md) must have been executed.
+1. A running instance of PostreSQL is required
+2. [AlcheMyPDF database migrations](https://github.com/onlineproducthouse/alchemypdf.db/blob/main/README.md) must have been executed.
 
 ## Installation
 
@@ -28,15 +29,24 @@ go install github.com/swaggo/swag/cmd/swag
 # set to either: local, test, qa, prod
 export ENVIRONMENT_NAME=local
 
+# set environment variables for the postgres database instance
+export ALCHEMYPDF_DB_PROTOCOL=postgres
+export ALCHEMYPDF_DB_USERNAME=root
+export ALCHEMYPDF_DB_PASSWORD=password
+export ALCHEMYPDF_DB_HOST=127.0.0.1
+export ALCHEMYPDF_DB_PORT=5432
+export ALCHEMYPDF_DB_NAME=alchemypdf
+
 # set environment variables for the API
 export RUN_SWAGGER=true
 
-export ALCHEMYPDF_API_HOST=127.0.0.1
-export ALCHEMYPDF_API_KEYS=69d2eddc-2cc9-acab-1a9c-dfcb1fca3efb
-export ALCHEMYPDF_API_PORT=10000
-export ALCHEMYPDF_API_PROTOCOL=http
 export ALCHEMYPDF_PROJECT_NAME=AlcheMyPDF
 export ALCHEMYPDF_PROJECT_SHORT_NAME=AlcheMyPDF
+
+export ALCHEMYPDF_API_PROTOCOL=http
+export ALCHEMYPDF_API_HOST=127.0.0.1
+export ALCHEMYPDF_API_PORT=10000
+export ALCHEMYPDF_API_KEYS=69d2eddc-2cc9-acab-1a9c-dfcb1fca3efb
 
 # initialise swagger docs
 $(go env GOPATH)/bin/swag init --parseDependency -g services/alchemypdf.api.app/app/app.go
@@ -45,27 +55,9 @@ $(go env GOPATH)/bin/swag init --parseDependency -g services/alchemypdf.api.app/
 go run ./services/alchemypdf.api.app/main.go
 ```
 
-In the logs, the API will output something like:
-
-```bash
-   ____    __
-  / __/___/ /  ___
- / _// __/ _ \/ _ \
-/___/\__/_//_/\___/ vX.X.X
-High performance, minimalist Go web framework
-https://echo.labstack.com
-____________________________________O/_______
-                                    O\
-⇨ http server started on [host]:[port]
-```
-
-This indicates the API has started.
-
-You can open Swagger with this URL: `http://127.0.0.1:10000/swagger/`
+Once the API is running, open Swagger with this URL: `http://127.0.0.1:10000/swagger/`
 
 ## Unit tests
-
-There are only two areas focused on for Unit Tests, being the utilities and domain
 
 For testing services:
 ```bash
