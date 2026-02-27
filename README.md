@@ -4,7 +4,8 @@ AlcheMyPDF API project
 
 ## Dependencies
 
-[AlcheMyPDF database migrations](https://github.com/onlineproducthouse/alchemypdf.db/blob/main/README.md) must have been executed.
+1. A running instance of PostreSQL is required
+2. [AlcheMyPDF database migrations](https://github.com/onlineproducthouse/alchemypdf.db/blob/main/README.md) must have been executed.
 
 ## Installation
 
@@ -27,6 +28,14 @@ go install github.com/swaggo/swag/cmd/swag
 ```bash
 # set to either: local, test, qa, prod
 export ENVIRONMENT_NAME=local
+
+# set environment variables for the postgres database instance
+export ALCHEMYPDF_DB_PROTOCOL=postgres
+export ALCHEMYPDF_DB_USERNAME=root
+export ALCHEMYPDF_DB_PASSWORD=password
+export ALCHEMYPDF_DB_HOST=127.0.0.1
+export ALCHEMYPDF_DB_PORT=5432
+export ALCHEMYPDF_DB_NAME=alchemypdf
 
 # set environment variables for the API
 export RUN_SWAGGER=true
