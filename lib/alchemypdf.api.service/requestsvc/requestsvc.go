@@ -7,14 +7,14 @@ import (
 
 	constant "alchemypdf.api/lib/alchemypdf.api.constant"
 	"alchemypdf.api/lib/alchemypdf.api.contract/requestcontract"
-	"alchemypdf.api/lib/alchemypdf.api.infrastructure/loglocal"
 	"alchemypdf.api/lib/alchemypdf.api.model/requestmodel"
 	"github.com/google/uuid"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperrorutil"
+	"github.com/onlineproducthouse/alchemypdf.api.logger/loggylog"
 )
 
 type RequestService struct {
-	logger loglocal.ILogger
+	logger loggylog.ILoggyLog
 	model  requestmodel.IRequestModel
 }
 
@@ -29,7 +29,7 @@ type IRequestService interface {
 }
 
 func NewRequestService(
-	logger loglocal.ILogger,
+	logger loggylog.ILoggyLog,
 	model requestmodel.IRequestModel,
 ) *RequestService {
 	return &RequestService{

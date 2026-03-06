@@ -191,6 +191,10 @@ github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260109210640-b9b
 github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260109210640-b9b67919f002/go.mod h1:jyAUJ/x6rCBH5d5npmWBqN/RiZjDTUOTyeKCn0mb8lQ=
 github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260117151318-cca1590b1033 h1:prfsjUdOCpvEzeyifKAyi5gYMLdXy+607Ve8gpbB+wE=
 github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260117151318-cca1590b1033/go.mod h1:jyAUJ/x6rCBH5d5npmWBqN/RiZjDTUOTyeKCn0mb8lQ=
+github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260227171508-19bc48302b79 h1:jCOj9umKekdGejczKLNBevSLtIQ+f1RErXsl54a7Eb4=
+github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260227171508-19bc48302b79/go.mod h1:jyAUJ/x6rCBH5d5npmWBqN/RiZjDTUOTyeKCn0mb8lQ=
+github.com/onlineproducthouse/alchemypdf.api.logger v0.0.0-20260306163012-75e6d12e7028 h1:tDB1kmBM7j9Rk5nAUnVbtn/sYMNYUChEBrnBV4rtpHc=
+github.com/onlineproducthouse/alchemypdf.api.logger v0.0.0-20260306163012-75e6d12e7028/go.mod h1:qLKmH0GvKBeIQgNfoNCzOXXbGQ7iEdVMC+Sk0Rx51wI=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

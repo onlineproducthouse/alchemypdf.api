@@ -4,15 +4,15 @@ import (
 	"fmt"
 
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/config"
-	"alchemypdf.api/lib/alchemypdf.api.infrastructure/loglocal"
 	"alchemypdf.api/lib/alchemypdf.api.service/healthchecksvc"
 	"github.com/labstack/echo/v4"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponseutil"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpstatusutil"
+	"github.com/onlineproducthouse/alchemypdf.api.logger/loggylog"
 )
 
 type HealthCheck struct {
-	logger loglocal.ILogger
+	logger loggylog.ILoggyLog
 	hc     healthchecksvc.IHealthCheckService
 	config config.IConfig
 }
@@ -21,7 +21,7 @@ type IHealthCheck interface {
 	Ping(c echo.Context) error
 }
 
-func New(logger loglocal.ILogger, hc healthchecksvc.IHealthCheckService, config config.IConfig) HealthCheck {
+func New(logger loggylog.ILoggyLog, hc healthchecksvc.IHealthCheckService, config config.IConfig) HealthCheck {
 	return HealthCheck{logger, hc, config}
 }
 

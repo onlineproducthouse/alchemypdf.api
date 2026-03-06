@@ -3,12 +3,12 @@ package healthchecksvc
 import (
 	"context"
 
-	"alchemypdf.api/lib/alchemypdf.api.infrastructure/loglocal"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/onlineproducthouse/alchemypdf.api.logger/loggylog"
 )
 
 type HealthCheckService struct {
-	logger loglocal.ILogger
+	logger loggylog.ILoggyLog
 	db     *pgxpool.Pool
 }
 
@@ -16,7 +16,7 @@ type IHealthCheckService interface {
 	Ping() error
 }
 
-func NewHealthCheckService(logger loglocal.ILogger, db *pgxpool.Pool) HealthCheckService {
+func NewHealthCheckService(logger loggylog.ILoggyLog, db *pgxpool.Pool) HealthCheckService {
 	return HealthCheckService{logger, db}
 }
 
