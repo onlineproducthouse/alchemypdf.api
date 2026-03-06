@@ -7,7 +7,7 @@ import (
 	"alchemypdf.api/services/alchemypdf.api.app/app/controller/healthcheckctrl"
 	"alchemypdf.api/services/alchemypdf.api.app/app/controller/requestctrl"
 	"alchemypdf.api/services/alchemypdf.api.app/app/mdlwr"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 

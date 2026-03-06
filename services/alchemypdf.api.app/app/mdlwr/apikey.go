@@ -5,7 +5,7 @@ import (
 
 	"slices"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperrorutil"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponseutil"
 )
@@ -13,7 +13,7 @@ import (
 func (api MiddlewareAPI) APIKey(next echo.HandlerFunc) echo.HandlerFunc {
 	const op string = "MiddlewareAPI.APIKey"
 
-	return func(c echo.Context) error {
+	return func(c *echo.Context) error {
 		valid := false
 
 		apiKey := c.Request().Header.Get(api.config.ReqHeaderApiKey())

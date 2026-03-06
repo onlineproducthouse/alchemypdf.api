@@ -9,8 +9,8 @@ import (
 	ioc "alchemypdf.api/lib/alchemypdf.api.ioc"
 	"alchemypdf.api/services/alchemypdf.api.app/app/mdlwr"
 	"alchemypdf.api/services/alchemypdf.api.app/app/router"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/echo/v5"
+	"github.com/labstack/echo/v5/middleware"
 )
 
 type Api struct {
@@ -87,9 +87,9 @@ func (s *Api) Start() error {
 func (s *Api) Stop(ctx context.Context) error {
 	s.infra.Logger().Info("stopping API")
 
-	if err := s.app.Shutdown(ctx); err != nil {
-		return err
-	}
+	// if err := s.app.Shutdown(ctx); err != nil {
+	// 	return err
+	// }
 
 	return nil
 }

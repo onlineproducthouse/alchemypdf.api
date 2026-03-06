@@ -8,7 +8,7 @@ import (
 	"alchemypdf.api/lib/alchemypdf.api.contract/requestcontract"
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/config"
 	"alchemypdf.api/lib/alchemypdf.api.service/requestsvc"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperrorutil"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponseutil"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpstatusutil"
@@ -17,12 +17,12 @@ import (
 
 type (
 	IRequestCtrl interface {
-		HandleCreate(c echo.Context) error
-		HandleGetByClientReference(c echo.Context) error
-		HandleGetWithContentByClientReference(c echo.Context) error
-		HandleGetPending(c echo.Context) error
-		HandleComplete(c echo.Context) error
-		HandleCallback(c echo.Context) error
+		HandleCreate(c *echo.Context) error
+		HandleGetByClientReference(c *echo.Context) error
+		HandleGetWithContentByClientReference(c *echo.Context) error
+		HandleGetPending(c *echo.Context) error
+		HandleComplete(c *echo.Context) error
+		HandleCallback(c *echo.Context) error
 	}
 
 	RequestCtrl struct {
@@ -85,7 +85,7 @@ func NewRequestCtrl(
 // @Failure 400,500 {object} httpresponseutil.Response
 // @param x-api-key header string true "API Key"
 // @param payload body CreateRequest true "CreateRequest"
-func (ctrl RequestCtrl) HandleCreate(c echo.Context) error {
+func (ctrl RequestCtrl) HandleCreate(c *echo.Context) error {
 	const op = "RequestCtrl.HandleCreate"
 
 	ctrl.logger.Info(fmt.Sprintf("[%s]: starting", op))
@@ -128,7 +128,7 @@ func (ctrl RequestCtrl) HandleCreate(c echo.Context) error {
 // @Failure 400,500 {object} httpresponseutil.Response
 // @param x-api-key header string true "API Key"
 // @param ClientReference path string true "ClientReference"
-func (ctrl RequestCtrl) HandleGetByClientReference(c echo.Context) error {
+func (ctrl RequestCtrl) HandleGetByClientReference(c *echo.Context) error {
 	const op = "RequestCtrl.HandleGetByClientReference"
 
 	ctrl.logger.Info(fmt.Sprintf("[%s]: starting", op))
@@ -157,7 +157,7 @@ func (ctrl RequestCtrl) HandleGetByClientReference(c echo.Context) error {
 // @Failure 400,500 {object} httpresponseutil.Response
 // @param x-api-key header string true "API Key"
 // @param ClientReference path string true "ClientReference"
-func (ctrl RequestCtrl) HandleGetWithContentByClientReference(c echo.Context) error {
+func (ctrl RequestCtrl) HandleGetWithContentByClientReference(c *echo.Context) error {
 	const op = "RequestCtrl.HandleGetWithContentByClientReference"
 
 	ctrl.logger.Info(fmt.Sprintf("[%s]: starting", op))
@@ -185,7 +185,7 @@ func (ctrl RequestCtrl) HandleGetWithContentByClientReference(c echo.Context) er
 // @success 200 {object} Request
 // @Failure 400,500 {object} httpresponseutil.Response
 // @param x-api-key header string true "API Key"
-func (ctrl RequestCtrl) HandleGetPending(c echo.Context) error {
+func (ctrl RequestCtrl) HandleGetPending(c *echo.Context) error {
 	const op = "RequestCtrl.HandleGetPending"
 
 	ctrl.logger.Info(fmt.Sprintf("[%s]: starting", op))
@@ -275,7 +275,7 @@ func (ctrl RequestCtrl) getPending() (*Request, *httperrorutil.AppError) {
 // @Failure 400,500 {object} httpresponseutil.Response
 // @param x-api-key header string true "API Key"
 // @param payload body CompleteRequest true "CompleteRequest"
-func (ctrl RequestCtrl) HandleComplete(c echo.Context) error {
+func (ctrl RequestCtrl) HandleComplete(c *echo.Context) error {
 	const op = "RequestCtrl.HandleComplete"
 
 	ctrl.logger.Info(fmt.Sprintf("[%s]: starting", op))
@@ -325,7 +325,7 @@ func (ctrl RequestCtrl) HandleComplete(c echo.Context) error {
 // @success 200 {object} httpresponseutil.Response
 // @Failure 400,500 {object} httpresponseutil.Response
 // @param payload body CallbackRequest true "CallbackRequest"
-func (ctrl RequestCtrl) HandleCallback(c echo.Context) error {
+func (ctrl RequestCtrl) HandleCallback(c *echo.Context) error {
 	const op = "RequestCtrl.HandleCallback"
 
 	ctrl.logger.Info(fmt.Sprintf("[%s]: starting", op))
