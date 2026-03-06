@@ -54,7 +54,7 @@ require (
 	github.com/mailru/easyjson v0.9.1 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260117151318-cca1590b1033 // indirect
+	github.com/onlineproducthouse/alchemypdf.api.httputils v0.0.0-20260227171508-19bc48302b79 // indirect
 	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
@@ -86,6 +86,7 @@ require (
 	github.com/georgysavva/scany v1.2.3
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/labstack/echo/v4 v4.15.0
+	github.com/onlineproducthouse/alchemypdf.api.logger v0.0.0-20260306163012-75e6d12e7028
 	github.com/rs/zerolog v1.34.0
 	github.com/sendgrid/rest v2.6.9+incompatible
 	github.com/swaggo/echo-swagger v1.4.1

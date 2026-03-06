@@ -2,17 +2,17 @@ package mdlwr
 
 import (
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/config"
-	"alchemypdf.api/lib/alchemypdf.api.infrastructure/loglocal"
+	"github.com/onlineproducthouse/alchemypdf.api.logger/loggylog"
 )
 
 type MiddlewareAPI struct {
 	config config.IConfig
-	logger loglocal.ILogger
+	logger loggylog.ILoggyLog
 }
 
 func New(
 	config config.IConfig,
-	logger loglocal.ILogger,
+	logger loggylog.ILoggyLog,
 ) MiddlewareAPI {
 	return MiddlewareAPI{
 		config,

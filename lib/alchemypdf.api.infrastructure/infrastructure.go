@@ -5,27 +5,27 @@ import (
 	"fmt"
 
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/config"
-	"alchemypdf.api/lib/alchemypdf.api.infrastructure/loglocal"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/onlineproducthouse/alchemypdf.api.logger/loggylog"
 )
 
 type (
 	IInfrastructure interface {
 		Config() config.TConfig
-		Logger() loglocal.Logger
+		Logger() loggylog.LoggyLog
 		DBConn() *pgxpool.Pool
 	}
 
 	Infrastructure struct {
 		config config.TConfig
-		logger loglocal.Logger
+		logger loggylog.LoggyLog
 		dbconn *pgxpool.Pool
 	}
 )
 
 func NewInfrastructure() Infrastructure {
 	cfg := config.Config()
-	logr := loglocal.New(cfg)
+	logr := loggylog.New("Info", 0)
 	dbConn := db(cfg, logr)
 
 	return Infrastructure{
@@ -35,7 +35,7 @@ func NewInfrastructure() Infrastructure {
 	}
 }
 
-func db(c config.IConfig, l loglocal.ILogger) *pgxpool.Pool {
+func db(c config.IConfig, l loggylog.ILoggyLog) *pgxpool.Pool {
 	l.Info("opening connection to database")
 
 	connStr := c.DbConnectionString()
@@ -65,7 +65,7 @@ func (infra Infrastructure) Config() config.TConfig {
 	return infra.config
 }
 
-func (infra Infrastructure) Logger() loglocal.Logger {
+func (infra Infrastructure) Logger() loggylog.LoggyLog {
 	return infra.logger
 }
 

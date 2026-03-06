@@ -7,12 +7,12 @@ import (
 	constant "alchemypdf.api/lib/alchemypdf.api.constant"
 	"alchemypdf.api/lib/alchemypdf.api.contract/requestcontract"
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/config"
-	"alchemypdf.api/lib/alchemypdf.api.infrastructure/loglocal"
 	"alchemypdf.api/lib/alchemypdf.api.service/requestsvc"
 	"github.com/labstack/echo/v4"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httperrorutil"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponseutil"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpstatusutil"
+	"github.com/onlineproducthouse/alchemypdf.api.logger/loggylog"
 )
 
 type (
@@ -27,7 +27,7 @@ type (
 
 	RequestCtrl struct {
 		config         config.IConfig
-		logger         loglocal.ILogger
+		logger         loggylog.ILoggyLog
 		requestService requestsvc.IRequestService
 	}
 
@@ -64,7 +64,7 @@ type (
 
 func NewRequestCtrl(
 	config config.IConfig,
-	logger loglocal.ILogger,
+	logger loggylog.ILoggyLog,
 	requestService requestsvc.IRequestService,
 ) *RequestCtrl {
 	return &RequestCtrl{
