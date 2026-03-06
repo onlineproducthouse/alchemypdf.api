@@ -25,7 +25,7 @@ type (
 
 func NewInfrastructure() Infrastructure {
 	cfg := config.Config()
-	logr := loggylog.New("Info", 0)
+	logr := loggylog.New(cfg.LogLevel(), cfg.LogHTTPStatusCode())
 	dbConn := db(cfg, logr)
 
 	return Infrastructure{

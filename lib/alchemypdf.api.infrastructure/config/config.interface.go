@@ -16,4 +16,8 @@ type IConfig interface {
 	APIKeys() []string
 
 	RunSwagger() bool
+
+	// Panic, Fatal, Error, Debug, Warn, Info
+	LogLevel() string
+	LogHTTPStatusCode() int
 }

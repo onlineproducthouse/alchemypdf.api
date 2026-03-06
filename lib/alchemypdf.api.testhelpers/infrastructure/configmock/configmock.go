@@ -55,3 +55,11 @@ func (c MockConfig) APIKeys() []string {
 func (c MockConfig) RunSwagger() bool {
 	return true
 }
+
+func (c MockConfig) LogLevel() string {
+	return "Info"
+}
+
+func (c MockConfig) LogHTTPStatusCode() int {
+	return 200
+}
