@@ -31,7 +31,12 @@ func (api MiddlewareAPI) APIKey(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		if !valid {
-			return errors.New("invalid api key provided")
+			msg := "invalid api key provided"
+			err := httperrorutil.ValidationErr(msg, op, errors.New(msg))
+
+			api.logger.AppError(err)
+
+			return c.JSON(err.StatusCode(), httpresponseutil.Default(err.Error(), err.StatusCode()))
 		}
 
 		return next(c)
