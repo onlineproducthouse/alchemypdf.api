@@ -5,7 +5,7 @@ import (
 
 	"alchemypdf.api/lib/alchemypdf.api.infrastructure/config"
 	"alchemypdf.api/lib/alchemypdf.api.service/healthchecksvc"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpresponseutil"
 	"github.com/onlineproducthouse/alchemypdf.api.httputils/httpstatusutil"
 	"github.com/onlineproducthouse/alchemypdf.api.logger/loggylog"
@@ -18,7 +18,7 @@ type HealthCheck struct {
 }
 
 type IHealthCheck interface {
-	Ping(c echo.Context) error
+	Ping(c *echo.Context) error
 }
 
 func New(logger loggylog.ILoggyLog, hc healthchecksvc.IHealthCheckService, config config.IConfig) HealthCheck {
@@ -34,7 +34,7 @@ func New(logger loggylog.ILoggyLog, hc healthchecksvc.IHealthCheckService, confi
 // @produce json
 // @success 200 {object} httpresponseutil.Response
 // @Failure 500 {object} httpresponseutil.Response
-func (ctrl HealthCheck) Ping(c echo.Context) error {
+func (ctrl HealthCheck) Ping(c *echo.Context) error {
 
 	if err := ctrl.hc.Ping(); err != nil {
 		ctrl.logger.Fatal(err.Error())
