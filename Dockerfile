@@ -4,7 +4,7 @@ ARG IMAGE_REGISTRY_BASE_URL
 
 FROM ${IMAGE_REGISTRY_BASE_URL}/golang:1.25.5-alpine AS builder
 
-LABEL maintainer="Bongani Masuku <bongani@1702tech.com>"
+LABEL maintainer="onlineproducthouse <info@onlineproducthouse.com>"
 
 RUN mkdir -p /app
 
